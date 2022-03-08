@@ -8,7 +8,9 @@ import os
 import urllib.request
 import requests
 from bs4 import BeautifulSoup as bs
-os.chdir(r'C:\path\to\your\pmd-bib')
+
+# os.chdir(r'./pmd_baseline')
+# os.chdir(r'C:\path\to\your\pmd-bib')
 url='https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/'
 response=requests.get(url)
 soup=bs(response.text,"html.parser")
