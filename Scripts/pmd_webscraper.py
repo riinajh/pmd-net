@@ -9,18 +9,18 @@ import urllib.request
 import requests
 from bs4 import BeautifulSoup as bs
 
-# os.chdir(r'./pmd_baseline')
-# os.chdir(r'C:\path\to\your\pmd-bib')
+os.mkdir('./pmd_baseline')
+os.chdir(r'./pmd_baseline')
 url='https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/'
 response=requests.get(url)
 soup=bs(response.text,"html.parser")
-first=soup.findAll('a')[2124]
-    #this is lazy cuz next time the baseline gets updated it'll only read the first 1062 entries
+first=soup.findAll('a')
 for tag in first:
     link=tag['href']
-    download='https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/'+link
-    urllib.request.urlretrieve(download,link)
-        #this line will download to your working directory
-    print(link, 'downloaded!')
+    if '.xml.gz' in link and not '.md5' in link:
+        download='https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/'+ link
+        urllib.request.urlretrieve(download,link)
+            #this line will download to your working directory
+        print(link, 'downloaded!')
     time.sleep(0.35) # so NCBI doesn't block your ip address
     #double check that this doesn't exceed what NCBI specifies as max # requests per min
