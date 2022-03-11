@@ -9,12 +9,14 @@ import copy
 import networkx as nx
 
 all_articles={}
-for file in os.scandir(r'C:\path\to\filtered\papers\directory'):
-    pubmedentries=bz2.BZ2File(file, 'r')
-    setone=pickle.load(pubmedentries)
-    for article in setone:
-        node_name=article['PMID']
-        all_articles[node_name]=article
+os.chdir(r'./pmd_baseline')
+for file in os.scandir():
+    if 'Index' in file.name:
+        pubmedentries=bz2.BZ2File(file, 'r')
+        index=pickle.load(pubmedentries)
+        for article in index:
+            node_name=article['PMID']
+            all_articles[node_name]=article
 #   loading in the selected articles and decompressing
 #   Creating keys for each pmid - use to construct graph
 
@@ -114,9 +116,9 @@ def make_subgraphs(Net):
         subg=nx.subgraph(Net,item)
         yield subg
 #nx.draw_networkx(Net)
-# ^this is useless
+# ^this is useless, creates a hairball
 
-#so, this can let me sort for the largest subgraphs - or conversely, review and filter out
+#so, this can let me sort for the largest subgraphs - or rather, review and filter out
 # small irrelevant ones. problem may arise if there are multiple large(>a few thousand)
 #graphs that are relevant. or, how would you determine + discriminate their relevance?
 # ...looks like it is finding all subgraphs fine, it just wont graph anything smaller than 
@@ -124,6 +126,7 @@ def make_subgraphs(Net):
 
 #ok now to assess importantness of each node within the graph.
 def most_central(Net):
+    #there are many ways to do this and they are all computationally expensive
     x=nx.betweenness_centrality(Net)
     central=max(x, key=lambda key:x[key])
         #this returns the key of the highest centrality valued node
@@ -136,7 +139,7 @@ def most_central(Net):
             i+=1
     print('the most central node is',central+ ', which is cited',i,'times')
 centrality=most_central(Net)
-#this takes a min or two to compute
+#this takes a min or two to compute...or ten
 
 download_graph=bz2.BZ2File('Net','w')
 pickle.dump(Net,download_graph)
@@ -144,5 +147,3 @@ download_all_articles=bz2.BZ2File('index','w')
 pickle.dump(all_articles, download_all_articles)
 download_centrality=bz2.BZ2File('Centrality','w')
 pickle.dump(centrality, download_centrality)
-
-

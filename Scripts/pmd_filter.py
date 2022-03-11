@@ -9,8 +9,8 @@ import xml.etree.ElementTree as ET
 import pickle
 import bz2
 import gzip
-os.chdir(r'C:\path\to\filtered\papers\directory')
 
+os.chdir(r'./pmd_baseline')
 
 def YieldEntries(root, dicttemplate):
     for article in root.iter('PubmedArticle'):
@@ -71,7 +71,7 @@ def YieldEntries(root, dicttemplate):
                 abst.append(section.text)
                 #print(abs)
             entry['abstract']=abst
-        # 'no abstract provided' BOI YOU BETTER NOT
+        # '...no abstract provided' BOI YOU BETTER NOT i don't feel like handling that exception
         for citation in article.iter('ArticleId'):
             #print(citation.text)
             entry['citations'].append(citation.text)
@@ -176,7 +176,7 @@ def abstractfilter(index,abskeywords,antikeywords):
 dicttemplate={'authors':[],'date':[],'title':'','journal':'','abstract':'','citations':[],'PMID':''}
 relevant_journals=set()
 irrelevant_journals=set()
-for file in os.scandir(r'C:\path\to\downloaded\archives\directory'):
+for file in os.scandir():
     f = gzip.open(file, 'rb')
     file_content = f.read().decode()
     f.close()
@@ -186,24 +186,27 @@ for file in os.scandir(r'C:\path\to\downloaded\archives\directory'):
     index=[]
     for article in YieldEntries(articleset,dicttemplate):
         index.append(article)
+        #this is the generator that iteratively goes through all files in baseline.
+        #it only needs 1 file's worth if entrues at a time bc the filtered stuff is
+        #getting put in another list, which is hopefully 50-100x smaller.
     relevants=[]
-    morerelevants=titlefilter(index,abskeywords,antikeywords)
-    for moreentries in morerelevants:
+    relevant_titles=titlefilter(index,abskeywords,antikeywords)
+    for entries in relevant_titles:
+        if entries not in relevants:
+            relevants.append(entries)
+    relevant_abstracts=abstractfilter(index,abskeywords,antikeywords)
+    for moreentries in relevant_abstracts:
         if moreentries not in relevants:
             relevants.append(moreentries)
-    evenmorerelevants=abstractfilter(index,abskeywords,antikeywords)
-    for evenmoreentries in evenmorerelevants:
-        if evenmoreentries not in relevants:
-            relevants.append(evenmoreentries)
     # relevantjournals=journalfilter(index,journalkeywords,relevant_journals,irrelevant_journals)
     # for entry in index:
     #     for journal in relevantjournals:
     #         if entry['journal'] == journal:
     #             #print(entry['title'])
     #             relevants.append(entry)
-    #the journal title filter just ended up being to much stuff to sift through. 
+    #the journal title filter just ended up being to much stuff to sift through manually. 
     pubmedentries=bz2.BZ2File('Index '+ str(file)[11:24], 'w')
     pickle.dump(relevants,pubmedentries)
     pubmedentries.close()
     #this bit here will dump compressed, filtered archives into whatever directory
-    #was cd'd at the top
+    #was cd'd at the top, be that pmd-baseline orwherever else you want stuff going

@@ -8,8 +8,8 @@ import os
 import urllib.request
 import requests
 from bs4 import BeautifulSoup as bs
-
-os.mkdir('./pmd_baseline')
+if not os.path.isdir('./pmd_baseline'):
+    os.mkdir('./pmd_baseline')
 os.chdir(r'./pmd_baseline')
 url='https://ftp.ncbi.nlm.nih.gov/pubmed/baseline/'
 response=requests.get(url)
