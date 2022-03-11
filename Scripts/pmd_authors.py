@@ -4,13 +4,13 @@ import bz2
 import networkx as nx
 import pandas as pd
 
-os.chdir(r'C:\path\to\below\files')
+os.chdir(r'./pmd_baseline')
 
 fileinfo=bz2.BZ2File('Net', 'r')
 filtered_articles_net=nx.read_gpickle(fileinfo)
 fileinfo=bz2.BZ2File('index', 'r')
 unfiltered_articles=nx.read_gpickle(fileinfo)
-fileinfo=bz2.BZ2File('centrality', 'r')
+fileinfo=bz2.BZ2File('Centrality', 'r')
 centrality=nx.read_gpickle(fileinfo)
 fileinfo.close()
 #these created in pmd_network.py
