@@ -9,7 +9,9 @@ import copy
 import networkx as nx
 
 all_articles={}
-os.chdir(r'./pmd_baseline')
+try:
+    os.chdir(r'./pmd_baseline')
+except: pass  
 for file in os.scandir():
     if 'Index' in file.name:
         pubmedentries=bz2.BZ2File(file, 'r')
@@ -138,12 +140,16 @@ def most_central(Net):
         if central in morestuff['citations']:
             i+=1
     print('the most central node is',central+ ', which is cited',i,'times')
-centrality=most_central(Net)
+#centrality=most_central(Net)
 #this takes a min or two to compute...or ten
 
 download_graph=bz2.BZ2File('Net','w')
 pickle.dump(Net,download_graph)
+download_graph.close()
 download_all_articles=bz2.BZ2File('index','w')
 pickle.dump(all_articles, download_all_articles)
-download_centrality=bz2.BZ2File('Centrality','w')
-pickle.dump(centrality, download_centrality)
+download_all_articles.close()
+#download_centrality=bz2.BZ2File('Centrality','w')
+#pickle.dump(centrality, download_centrality)
+#download_centrality.close()
+pubmedentries.close()
