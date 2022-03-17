@@ -8,6 +8,7 @@ import os
 import urllib.request
 import requests
 from bs4 import BeautifulSoup as bs
+os.chdir('..')
 if not os.path.isdir('./pmd_baseline'):
     os.mkdir('./pmd_baseline')
 os.chdir(r'./pmd_baseline')

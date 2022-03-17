@@ -9,9 +9,8 @@ import copy
 import networkx as nx
 
 all_articles={}
-try:
-    os.chdir(r'./pmd_baseline')
-except: pass  
+os.chdir('..')
+os.chdir('pmd_baseline')
 for file in os.scandir():
     if 'Index' in file.name:
         pubmedentries=bz2.BZ2File(file, 'r')

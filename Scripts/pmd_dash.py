@@ -2,7 +2,7 @@
     Adapted from https://dash.plotly.com/cytoscape and other Plotly dash tutorials. 
     wanted to be able to visualize the network a little bit, and nx is not great.
 '''
-# Run with `python app.py` and
+# Run with `python Scripts/pmd_dash.py` and
 # visit 127.0.0.1:8050/ in your web browser.
 
 
@@ -18,27 +18,33 @@ import networkx as nx
 import json
 import os
 
-try:
-    os.chdir(r'./pmd_baseline')
-except: pass 
+os.chdir('..')
+os.chdir('pmd_baseline')
 fileinfo=bz2.BZ2File('Net', 'r')
 filtered_articles_net=nx.read_gpickle(fileinfo)
 fileinfo=bz2.BZ2File('index', 'r')
 unfiltered_articles=nx.read_gpickle(fileinfo)
 fileinfo.close()
+os.chdir('..')
+os.chdir('Scripts')
+
+
 
 app = dash.Dash(__name__)
 
-def generate_nodes(unfiltered_articles):
-    for item in unfiltered_articles:
-        node= {'data': {'id': unfiltered_articles[item]['PMID'],
+def generate_nodes(filtered_atricles_net, unfiltered_articles):
+    for item in filtered_articles_net:
+        node={'data': {'id': item,
                         'label': unfiltered_articles[item]['PMID']}}
         yield node
 nodes=[]
 for node in generate_nodes(unfiltered_articles):
     nodes.append(node)
+def generate_edges(filtered_articles_net, unfiltered_articles):
+    for item in filtered_articles_net:
+        edge={'finish this please!!!'}
+        yield edge
 edges=[]
-
 default_stylesheet = [
     {
         'selector': 'node',

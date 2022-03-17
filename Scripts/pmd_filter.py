@@ -10,9 +10,8 @@ import pickle
 import bz2
 import gzip
 
-try:
-    os.chdir(r'./pmd_baseline')
-except: pass 
+os.chdir('..')
+os.chdir('pmd_baseline')
 def YieldEntries(root, dicttemplate):
     for article in root.iter('PubmedArticle'):
         entry=copy.deepcopy(dicttemplate)
