@@ -1,7 +1,6 @@
 '''
     Takes the raw xml.gz files downloaded from baseline by the webscraper and
-    filters them based on keyword search, then dumps new compressed files
-    into a separate directory.
+    filters them based on keyword search, then dumps new compressed data into 'index' files
 '''
 import os
 import copy
@@ -12,6 +11,8 @@ import gzip
 
 os.chdir('..')
 os.chdir('pmd_baseline')
+if not os.path.isdir('pmd_filtered'):
+    os.mkdir('pmd_filtered')
 def YieldEntries(root, dicttemplate):
     for article in root.iter('PubmedArticle'):
         entry=copy.deepcopy(dicttemplate)
@@ -71,7 +72,7 @@ def YieldEntries(root, dicttemplate):
                 abst.append(section.text)
                 #print(abs)
             entry['abstract']=abst
-        # '...no abstract provided' BOI YOU BETTER NOT i don't feel like handling that exception
+        # '...no abstract provided' i don't feel like handling that exception
         for citation in article.iter('ArticleId'):
             #print(citation.text)
             entry['citations'].append(citation.text)
@@ -187,7 +188,7 @@ for file in os.scandir():
     for article in YieldEntries(articleset,dicttemplate):
         index.append(article)
         #this is the generator that iteratively goes through all files in baseline.
-        #it only needs 1 file's worth if entrues at a time bc the filtered stuff is
+        #it only needs 1 file's worth if entries at a time bc the filtered stuff is
         #getting put in another list, which is hopefully 50-100x smaller.
     relevants=[]
     relevant_titles=titlefilter(index,abskeywords,antikeywords)
@@ -209,4 +210,4 @@ for file in os.scandir():
     pickle.dump(relevants,pubmedentries)
     pubmedentries.close()
     #this bit here will dump compressed, filtered archives into whatever directory
-    #was cd'd at the top, be that pmd-baseline orwherever else you want stuff going
+    #was cd'd at the top, be that pmd-baseline or wherever else you want stuff going
