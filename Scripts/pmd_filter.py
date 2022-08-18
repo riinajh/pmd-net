@@ -1,9 +1,13 @@
 '''
     Takes the raw xml.gz files downloaded from baseline by the webscraper and
     filters them based on keyword search, then dumps new compressed data into 'index' files
+    Also accepts a text file with two lines: first, keywords to search, and second, keywords
+    to filter against
 '''
-import os
+import glob, os
+import sys
 import copy
+import csv
 import xml.etree.ElementTree as ET
 import pickle
 import bz2
@@ -109,7 +113,14 @@ antikeywords=['patient','cancer','Cancer','tumor','clinic','obes','neuro','cardi
               'Africa','estrogen','medic','speech','spine','bovine','mouse','osteo','Rat']
             # these commonly co-occur with the keywords of interest so i've 
             # blacklisted them here
-def titlefilter(index,abskeywords,antikeywords):
+
+keywords=[]
+with open(sys.argv[1], newline='') as words:
+   keys=csv.reader(words) 
+   for line in keys:
+       keywords.append(line)
+
+def titlefilter(index,keywords):
     '''
     
 
@@ -126,10 +137,10 @@ def titlefilter(index,abskeywords,antikeywords):
     '''
     relevant=[]
     for entry in index:
-        for keyw in abskeywords:
+        for keyw in keywords[0]:
             try:
                 if keyw in str(entry['title']) and entry['title'] not in relevant:
-                    if any(antik in str(entry['title']) for antik in antikeywords):
+                    if any(antik in str(entry['title']) for antik in keywords[1]):
                         continue
                     else:
                         print(entry['title'])
@@ -138,13 +149,8 @@ def titlefilter(index,abskeywords,antikeywords):
                 continue
     return relevant
 
-abskeywords=['metaboli','edit','synthetic','system','engineer','gene regulat']
-antikeywords=['patient','cancer','Cancer','tumor','clinic','obes','neuro','cardio',
-              'inflamm','syndrome','Mediterr','person','COVID','anatom','insulin',
-              'pharma','Iran','veterinar','dental','child','athlet','sport','surgery',
-              'Africa','estrogen','medic','speech','spine','bovine','mouse','osteo','rat']
 
-def abstractfilter(index,abskeywords,antikeywords):
+def abstractfilter(index,keywords):
     """
     
 
@@ -162,10 +168,10 @@ def abstractfilter(index,abskeywords,antikeywords):
     
     relevant=[]
     for entry in index:
-        for keyw in abskeywords:
+        for keyw in keywords[0]:
             try:
                 if keyw in str(entry['abstract']):
-                    if any(antik in str(entry['abstract']) for antik in antikeywords):
+                    if any(antik in str(entry['abstract']) for antik in keywords[1]):
                         continue
                     else:
                         print(entry['title'])
@@ -177,7 +183,7 @@ def abstractfilter(index,abskeywords,antikeywords):
 dicttemplate={'authors':[],'date':[],'title':'','journal':'','abstract':'','citations':[],'PMID':''}
 relevant_journals=set()
 irrelevant_journals=set()
-for file in os.scandir():
+for file in glob.glob('*.gz'):
     f = gzip.open(file, 'rb')
     file_content = f.read().decode()
     f.close()
@@ -206,7 +212,8 @@ for file in os.scandir():
     #             #print(entry['title'])
     #             relevants.append(entry)
     #the journal title filter just ended up being to much stuff to sift through manually. 
-    pubmedentries=bz2.BZ2File('Index '+ str(file)[11:24], 'w')
+    filepath=os.path.join(os.getcwd(), 'pmd_filtered\Index_'+ str(file)[9:24])
+    pubmedentries=bz2.BZ2File(filepath, 'w')
     pickle.dump(relevants,pubmedentries)
     pubmedentries.close()
     #this bit here will dump compressed, filtered archives into whatever directory
