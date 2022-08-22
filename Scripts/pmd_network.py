@@ -10,7 +10,7 @@ import networkx as nx
 
 all_articles={}
 os.chdir('..')
-os.chdir('pmd_baseline')
+os.chdir('pmd_baseline\pmd_filtered')
 for file in os.scandir():
     if 'Index' in file.name:
         pubmedentries=bz2.BZ2File(file, 'r')
@@ -43,7 +43,7 @@ def filter_singletons(graph):
     Returns
     -------
     y : how many nodes have >0 connections
-    n : how many single (nonconnected) nodes there are
+    n : how many single (disconnected) nodes there are
 
     """
     

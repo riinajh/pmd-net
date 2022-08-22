@@ -88,7 +88,7 @@ def YieldEntries(root, dicttemplate):
 
 
 # ok so how are we to filter?
-journalkeywords=['Metab','Eng','Synth','Syst']
+journalkeywords=[]
 def journalfilter(index,journalkeywords,relevant_journals, irrelevant_journals):
     '''
         manual review of journal titles that match keywords. auto-includes all
@@ -105,14 +105,6 @@ def journalfilter(index,journalkeywords,relevant_journals, irrelevant_journals):
                 if prompt == 'n':
                     irrelevant_journals.add(entry['journal'])
     return relevant_journals
-
-abskeywords=['metaboli','edit','synthetic','system','engineer','gene regulat']
-antikeywords=['patient','cancer','Cancer','tumor','clinic','obes','neuro','cardio',
-              'inflamm','syndrome','Mediterr','person','COVID','anatom','insulin',
-              'pharma','Iran','veterinar','dental','child','athlet','sport','surgery',
-              'Africa','estrogen','medic','speech','spine','bovine','mouse','osteo','Rat']
-            # these commonly co-occur with the keywords of interest so i've 
-            # blacklisted them here
 
 keywords=[]
 with open(sys.argv[1], newline='') as words:
@@ -197,11 +189,11 @@ for file in glob.glob('*.gz'):
         #it only needs 1 file's worth if entries at a time bc the filtered stuff is
         #getting put in another list, which is hopefully 50-100x smaller.
     relevants=[]
-    relevant_titles=titlefilter(index,abskeywords,antikeywords)
+    relevant_titles=titlefilter(index,keywords)
     for entries in relevant_titles:
         if entries not in relevants:
             relevants.append(entries)
-    relevant_abstracts=abstractfilter(index,abskeywords,antikeywords)
+    relevant_abstracts=abstractfilter(index,keywords)
     for moreentries in relevant_abstracts:
         if moreentries not in relevants:
             relevants.append(moreentries)

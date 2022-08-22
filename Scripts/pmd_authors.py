@@ -5,7 +5,7 @@ import networkx as nx
 import pandas as pd
 
 os.chdir('..')
-os.chdir('pmd_baseline')
+os.chdir('pmd_baseline\pmd_filtered')
 fileinfo=bz2.BZ2File('Net', 'r')
 filtered_articles_net=nx.read_gpickle(fileinfo)
 fileinfo=bz2.BZ2File('index', 'r')
