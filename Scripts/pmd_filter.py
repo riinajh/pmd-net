@@ -208,5 +208,6 @@ for file in glob.glob('*.gz'):
     pubmedentries=bz2.BZ2File(filepath, 'w')
     pickle.dump(relevants,pubmedentries)
     pubmedentries.close()
+    print(file, ' filtered!')
     #this bit here will dump compressed, filtered archives into whatever directory
     #was cd'd at the top, be that pmd-baseline or wherever else you want stuff going
