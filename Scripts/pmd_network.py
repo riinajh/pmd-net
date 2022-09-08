@@ -174,9 +174,10 @@ i=Net.in_degree(central)
 print('the most central node is',central+ ', which is cited',i,'times')
 
 download_graph=bz2.BZ2File('Net','w')
-pickle.dump(Net,download_graph)
+pickle.dump(uniNet,download_graph)
+#cant pickle digraphs????
 download_graph.close()
-download_all_articles=bz2.BZ2File('index','w')
+download_all_articles=bz2.BZ2File('articles','w')
 pickle.dump(all_articles, download_all_articles)
 download_all_articles.close()
 download_centrality=bz2.BZ2File('Centrality','w')
