@@ -19,12 +19,13 @@ import json
 import os
 
 os.chdir('..')
-os.chdir('pmd_baseline')
+os.chdir('pmd_baseline/pmd_filtered')
 fileinfo=bz2.BZ2File('Net', 'r')
 filtered_articles_net=nx.read_gpickle(fileinfo)
-fileinfo=bz2.BZ2File('index', 'r')
+fileinfo=bz2.BZ2File('articles', 'r')
 unfiltered_articles=nx.read_gpickle(fileinfo)
 fileinfo.close()
+os.chdir('..')
 os.chdir('..')
 os.chdir('Scripts')
 
@@ -32,19 +33,22 @@ os.chdir('Scripts')
 
 app = dash.Dash(__name__)
 
-def generate_nodes(filtered_atricles_net, unfiltered_articles):
+def generate_nodes(filtered_articles_net, unfiltered_articles):
     for item in filtered_articles_net:
         node={'data': {'id': item,
                         'label': unfiltered_articles[item]['PMID']}}
         yield node
 nodes=[]
-for node in generate_nodes(unfiltered_articles):
+for node in generate_nodes(filtered_articles_net, unfiltered_articles):
     nodes.append(node)
 def generate_edges(filtered_articles_net, unfiltered_articles):
     for item in filtered_articles_net:
-        edge={'finish this please!!!'}
-        yield edge
+        for n in filtered_articles_net.neighbors(item):
+            edge={'data':{'source':item, 'target':n}}
+            yield edge
 edges=[]
+for edge in generate_edges(filtered_articles_net, unfiltered_articles):
+    edges.append(edge)
 default_stylesheet = [
     {
         'selector': 'node',
@@ -64,8 +68,7 @@ styles = {
 app.layout = html.Div([
     cyto.Cytoscape(
         id='cytoscape-event-callbacks-2',
-        layout={'name': 'breadthfirst',
-                'roots': '[id = "33293307"]'},
+        layout={'name': 'breadthfirst'},
         elements=edges+nodes,
         stylesheet=default_stylesheet,
         style={'width': '100%', 'height': '450px'}

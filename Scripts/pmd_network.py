@@ -142,9 +142,9 @@ t=set()
 lengths=[]
 for node in Net:
     try:
-        if Net.in_degree(node)==0 and int(all_articles[node]['date'][0])<1970:
+        if Net.in_degree(node)==0 and int(all_articles[node]['date'][0])<2000:
             s.add(node)
-        elif Net.out_degree(node)==0 and int(all_articles[node]['date'][0])>2010:
+        elif Net.out_degree(node)==0 and int(all_articles[node]['date'][0])>2000:
             t.add(node)
     except ValueError:
         continue
