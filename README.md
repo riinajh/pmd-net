@@ -4,7 +4,7 @@ I initially wrote this as a way to map synbio research. I'm not enthralled with 
 I run everything out of terminal, cd into 'Scripts', although Spyder works well too.
 
 <h5>Obtaining data</h5>
-The dataset this project analyzes is [PubMed's annual baseline citation index.](https://www.nlm.nih.gov/databases/download/pubmed_medline.html), using 'pmd_webscraper'. I adapted some webscraper code from [this](https://towardsdatascience.com/how-to-web-scrape-with-python-in-4-minutes-bc49186a8460) post to download all 1000+ .xml files to new directory ('pmd_baseline') inside this cloned repo. Unfortunately, this whole process needs to be a bit slow, otherwise NIH will block your IP if you make too many requests per second - it takes a few hours to get everything in.
+The dataset this project analyzes is [PubMed's annual baseline citation index.](https://www.nlm.nih.gov/databases/download/pubmed_medline.html) , using 'pmd_webscraper'. I adapted some webscraper code from [this](https://towardsdatascience.com/how-to-web-scrape-with-python-in-4-minutes-bc49186a8460) post to download all 1000+ .xml files to new directory ('pmd_baseline') inside this cloned repo. Unfortunately, this whole process needs to be a bit slow, otherwise NIH will block your IP if you make too many requests per second - it takes a few hours to get everything in.
 
 <h5>Broad filtering</h5>
 'pmd_filter' is the first stab at filtering down to only the set of articles you're interested in, based on multiple keyword search on the article title and/or abstract. It accepts a .txt file input with two lines, like so:
