@@ -1,4 +1,4 @@
-##**Introduction**
+##Introduction
 I initially wrote this as a way to map synbio research. I'm not enthralled with searches that present results in a list, because although this is necessary to present things neatly, it doesn't actually reflect the way that the information in scientific research is structured. It seems easier to me to jump into a new subfield by getting a bird's-eye view of the particular citation clusters, and then prioritizing readings based on network analysis, rather than by however the ranking algorithm decides to present search results to you, which seems prone to bias. <sup>[Beel & Gipp](doi.org/10.1109/RCIS.2009.5089308)</sup>  
 
 I run everything out of terminal, cd into 'Scripts', although Spyder works well too.
