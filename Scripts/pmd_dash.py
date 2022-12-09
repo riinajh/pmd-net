@@ -13,6 +13,7 @@ import dash_cytoscape as cyto
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
+import seaborn as sns
 import bz2
 import networkx as nx
 import json
@@ -24,25 +25,26 @@ fileinfo=bz2.BZ2File('Net', 'r')
 filtered_articles_net=nx.read_gpickle(fileinfo)
 fileinfo=bz2.BZ2File('articles', 'r')
 unfiltered_articles=nx.read_gpickle(fileinfo)
+fileinfo=bz2.BZ2File('Centrality','r')
+centrality=nx.read_gpickle(fileinfo)
 fileinfo.close()
 os.chdir('..')
 os.chdir('..')
 os.chdir('Scripts')
 
 
-
 app = dash.Dash(__name__)
 
-def generate_nodes(filtered_articles_net, unfiltered_articles):
-    for item in filtered_articles_net:
+def generate_nodes(centrality, unfiltered_articles):
+    for item in centrality:
         node={'data': {'id': item,
                         'label': unfiltered_articles[item]['PMID']}}
         yield node
 nodes=[]
-for node in generate_nodes(filtered_articles_net, unfiltered_articles):
+for node in generate_nodes(centrality, unfiltered_articles):
     nodes.append(node)
-def generate_edges(filtered_articles_net, unfiltered_articles):
-    for item in filtered_articles_net:
+def generate_edges(centrality, unfiltered_articles):
+    for item in centrality:
         for n in filtered_articles_net.neighbors(item):
             edge={'data':{'source':item, 'target':n}}
             yield edge
@@ -107,4 +109,4 @@ def displayTapEdgeData(data):
                data['source'].upper() + " and " + data['target'].upper()
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(host='0.0.0.0', debug=False)

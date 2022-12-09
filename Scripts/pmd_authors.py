@@ -73,8 +73,9 @@ if __name__=='__main__':
     df3=x.merge(y,how='inner',on='institution')
     df3=df3.sort_values(by=['count_x', 'count_y'],axis=0, ascending=False)
     df3=df3.rename(columns={'count_x':'recency', 'count_y':'centrality'})
-    sns.scatterplot(data=df3,x='recency',y='centrality')
-    
+    #sns.scatterplot(data=df3,x='recency',y='centrality')
+    os.chdir('..')
+    df3.to_csv(os.getcwd()+'\\institutions')
     
 # ok, now i have a list of all authors, as well as authors from most central papers.
 # how would i get from the most central papers to the current, significant ones?
