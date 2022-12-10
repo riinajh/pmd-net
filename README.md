@@ -2,7 +2,7 @@
 
 I initially wrote this as a way to map synbio research. I'm not enthralled with searches that present results in a list, because although this is necessary to present things neatly, it doesn't actually reflect the way that the information in scientific research is structured. It seems easier to me to jump into a new subfield by getting a bird's-eye view of the particular citation clusters, and then prioritizing readings based on network analysis, rather than by however the ranking algorithm decides to present search results to you, which seems prone to bias. <sup>[Beel & Gipp](https://doi.org/10.1109/RCIS.2009.5089308)</sup>
 
-I run everything out of terminal, cd into 'Scripts', although Spyder works well too.
+I run everything out of Anaconda Prompt, cd into 'Scripts', although Spyder works fine too.
 
 <h5>Obtaining data</h5>
 
@@ -19,10 +19,11 @@ The dataset this project analyzes is [PubMed's annual baseline citation index](h
 ~~Case sensitive and no substring matching, sorry.~~ It generates objects for all of them, then filters. The first line catches everything you want, and the second filters out from that set things you don't.  Notice that I'm interested in metabolism and metabolites, but not 'metabolic syndrome'. These particular keywords yield about 130,000 articles, and download only the filtered set.
 
 <h5>Generating networks</h5>
+
 'pmd_network' then goes to each filtered file, looks at all articles, their PMIDs and IDs of their citations, and builds directed graphs out of them. If you're lucky, the network size distribution obeys some rough power law and you can pretty comfortably filter out everything except the largest subgraph. 
 
 
-From this chosen network, it then attempts to calculate a simplified version of betweenness centrality. I took ~200 of the oldest papers in my network with indegree==0 (have not cited by anything in network) and ~200 of the youngest papers with outdegree==0 (have not been cited by anything in network), and used a bidirectional dijkstra to calculate shortest paths between all pairs in these two sets. The network object, set of relevant articles, and centrality measurements are all then saved.
+From this chosen network, it then attempts to calculate a simplified version of betweenness centrality. I took ~200 of the oldest papers in my network with indegree==0 (have not cited by anything in network) and ~200 of the youngest papers with outdegree==0 (have not been cited anything else in network), and used a bidirectional dijkstra to calculate shortest paths between all pairs in these two sets. The network object, set of relevant articles, and centrality measurements are all then saved.
 
 <h5>Analysis</h5>
 
