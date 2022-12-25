@@ -23,7 +23,7 @@ The dataset this project analyzes is [PubMed's annual baseline citation index](h
 'pmd_network' then goes to each filtered file, looks at all articles, their PMIDs and IDs of their citations, and builds directed graphs out of them. If you're lucky, the network size distribution obeys some rough power law and you can pretty comfortably filter out everything except the largest subgraph. 
 
 
-From this chosen network, it then attempts to calculate a simplified version of betweenness centrality. I took ~200 of the oldest papers in my network with indegree==0 (have not cited by anything in network) and ~200 of the youngest papers with outdegree==0 (have not been cited anything else in network), and used a bidirectional dijkstra to calculate shortest paths between all pairs in these two sets. The network object, set of relevant articles, and centrality measurements are all then saved.
+From this chosen network, it then attempts to calculate a simplified version of betweenness centrality. I took ~200 of the oldest papers in my network with indegree==0 (have not cited by anything in network) and ~200 of the youngest papers with outdegree==0 (have not been been cited by anything else in network), and used a bidirectional dijkstra to calculate shortest paths between all pairs in these two sets. The network object, set of relevant articles, and centrality measurements are all then saved.
 
 <h5>Analysis</h5>
 
