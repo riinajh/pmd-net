@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  pipeline:
+    build: .
+    command: conda run -n pmd-net python src/main.py
+    volumes:
+      - .:/app
+
+  dev:
+    build: .
+    command: conda run -n pmd-net jupyter lab --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.token='token'
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/app

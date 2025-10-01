@@ -1,2 +1,3 @@
-pmd_baseline
+notebooks
+data
 !.gitignore
